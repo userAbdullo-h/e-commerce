@@ -1,0 +1,24 @@
+{
+	"name": "e_commerce",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js",
+		"dev": "nodemon app.js"
+	},
+	"keywords": [],
+	"author": "userA",
+	"license": "ISC",
+	"type": "commonjs",
+	"dependencies": {
+		"dotenv": "^17.2.2",
+		"express": "^5.1.0",
+		"express-handlebars": "^8.0.3",
+		"express-session": "^1.18.2",
+		"session": "^0.1.0"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.10"
+	}
+}
