@@ -1,34 +1,33 @@
-const productModel = require('../models/product.model')
+const { productModel } = require('../models')
 
 class AdminController {
 	renderAddProduc(req, res) {
 		res.render('admin/add-products', { title: 'Add products' })
 	}
 
-	addProducts(req, res) {
-		// console.log(req.body)
-
-		productModel.add(req.body)
+	async addProducts(req, res) {
+		const { title, image, price } = req.body
+		await productModel.create({ title, image, price })
 		res.redirect('/admin/products')
 	}
 
-	renderProducts(req, res) {
-		const products = productModel.getAll()
+	async renderProducts(req, res) {
+		const products = await productModel.findAll({ raw: true })
 		res.render('admin/products', { title: 'Admin Products', products })
 	}
 
-	renderEditProduct(req, res) {
-		const product = productModel.findById(req.params.id)
+	async renderEditProduct(req, res) {
+		const product = await productModel.findByPk(req.params.id, { raw: true })
 		res.render('admin/edit-product', { title: 'Edit Product', product })
 	}
 
-	editProduct(req, res) {
-		productModel.update(req.params.id, req.body)
+	async editProduct(req, res) {
+		await productModel.update(req.body, { where: { id: req.params.id } })
 		res.redirect('/admin/products')
 	}
 
-	deleteProduct(req, res) {
-		productModel.remove(req.params.id)
+	async deleteProduct(req, res) {
+		await productModel.destroy({ where: { id: req.params.id } })
 		res.redirect('/admin/products')
 	}
 }

@@ -2,7 +2,13 @@
 
 <form action='/admin/add-products' method='post'>
 	<div class='form-floating mb-3'>
-		<input class='form-control' id='title' placeholder='Title' name='title' />
+		<input
+			class='form-control'
+			id='title'
+			placeholder='Title'
+			name='title'
+			required
+		/>
 		<label for='title'>Title</label>
 	</div>
 
@@ -12,12 +18,21 @@
 			id='image'
 			placeholder='Image URL'
 			name='image'
+			required
 		/>
 		<label for='image'>Image</label>
 	</div>
 
 	<div class='form-floating mb-3'>
-		<input class='form-control' id='price' placeholder='Price' name='price' />
+		<input
+			class='form-control'
+			id='price'
+			placeholder='Price'
+			name='price'
+			type='number'
+			step='0.01'
+			required
+		/>
 		<label for='price'>Price</label>
 	</div>
 

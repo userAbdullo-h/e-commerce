@@ -1,6 +1,6 @@
 <h1>Shopping cart</h1>
 
-{{#if card.items.length}}
+{{#if products.length}}
 	<table class='table table-stripped align-middle'>
 		<thead>
 			<tr>
@@ -11,7 +11,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{{#each card.items}}
+			{{#each products}}
 				<tr>
 					<td class='d-flex gap-2 align-items-center'>
 						<img
@@ -21,7 +21,7 @@
 							height='50'
 						/><p class='fw-bold m-0'>Subaru</p>
 					</td>
-					<td>{{this.amount}}</td>
+					<td>{{this.quantity}}</td>
 					<td>${{this.price}}</td>
 					<td>
 						<form action='/card/delete/{{this.id}}' method='post' class='m-0'>

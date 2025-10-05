@@ -4,6 +4,7 @@ const path = require('path')
 const express = require('express')
 const { engine } = require('express-handlebars')
 const session = require('express-session')
+const { sequelize, userModel } = require('./models')
 
 const app = express()
 
@@ -30,10 +31,11 @@ app.use('/admin', require('./routes/admin.route'))
 app.use((req, res) => {
 	res.status(404).render('404', { title: '404 Not Found' })
 })
-const PORT = process.env.PORT
 
-app.listen(PORT, () =>
-	console.log(`Server is running on http://localhost${PORT}`)
-)
+sequelize.sync().then(() => {
+	const PORT = process.env.PORT
 
-// //Git PULL
+	app.listen(PORT, () =>
+		console.log(`Server is running on http://localhost${PORT}`)
+	)
+})
