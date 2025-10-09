@@ -1,4 +1,4 @@
-const { productModel } = require('../models')
+const productModel = require('../models/product.model')
 
 class AdminController {
 	renderAddProduc(req, res) {
@@ -6,28 +6,28 @@ class AdminController {
 	}
 
 	async addProducts(req, res) {
-		const { title, image, price } = req.body
-		await productModel.create({ title, image, price })
+		// const { title, image, price } = req.body
+		await productModel.create(req.body)
 		res.redirect('/admin/products')
 	}
 
 	async renderProducts(req, res) {
-		const products = await productModel.findAll({ raw: true })
+		const products = await productModel.find().lean()
 		res.render('admin/products', { title: 'Admin Products', products })
 	}
 
 	async renderEditProduct(req, res) {
-		const product = await productModel.findByPk(req.params.id, { raw: true })
+		const product = await productModel.findById(req.params.id).lean()
 		res.render('admin/edit-product', { title: 'Edit Product', product })
 	}
 
 	async editProduct(req, res) {
-		await productModel.update(req.body, { where: { id: req.params.id } })
+		await productModel.findByIdAndUpdate(req.params.id, req.body)
 		res.redirect('/admin/products')
 	}
 
 	async deleteProduct(req, res) {
-		await productModel.destroy({ where: { id: req.params.id } })
+		await productModel.findByIdAndDelete(req.params.id)
 		res.redirect('/admin/products')
 	}
 }

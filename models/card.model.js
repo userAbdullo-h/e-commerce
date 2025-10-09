@@ -1,6 +1,16 @@
-const { DataTypes } = require('sequelize')
-const sequelize = require('../config/db.config')
+const mongoose = require('mongoose')
 
-module.exports = sequelize.define('Card', {
-	quantity: { type: DataTypes.INTEGER, defaultValue: 1 },
-})
+const cardSchema = new mongoose.Schema(
+	{
+		user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+		items: [
+			{
+				quantity: { type: Number, default: 1 },
+				product: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
+			},
+		],
+	},
+	{ timestamps: true }
+)
+
+module.exports = mongoose.model('card', cardSchema)

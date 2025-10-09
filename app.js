@@ -4,7 +4,7 @@ const path = require('path')
 const express = require('express')
 const { engine } = require('express-handlebars')
 const session = require('express-session')
-const { sequelize, userModel } = require('./models')
+const mongoose = require('mongoose')
 
 const app = express()
 
@@ -32,10 +32,17 @@ app.use((req, res) => {
 	res.status(404).render('404', { title: '404 Not Found' })
 })
 
-sequelize.sync().then(() => {
-	const PORT = process.env.PORT
+async function startApp() {
+	try {
+		mongoose.connect(process.env.MONGO_URI)
+		console.log('Db connected')
 
-	app.listen(PORT, () =>
-		console.log(`Server is running on http://localhost${PORT}`)
-	)
-})
+		const PORT = process.env.PORT
+		app.listen(PORT, () =>
+			console.log(`Server is running on http://localhost${PORT}`)
+		)
+	} catch (error) {
+		console.log(`Error: ${error}`)
+	}
+}
+startApp()

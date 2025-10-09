@@ -12,11 +12,11 @@
 					</div>
 					<div class="card-footer d-flex gap-2 pt-2 px-1 pb-2">
 						<a
-							href='/admin/edit-product/{{this.id}}'
+							href='/admin/edit-product/{{this._id}}'
 							class='btn btn-sm btn-warning w-50'
 						>Edit</a>
 						<form
-							action='/admin/delete-product/{{this.id}}'
+							action='/admin/delete-product/{{this._id}}'
 							method='post'
 							class="w-50 m-0"
 							onclick="return confirm('Are you sure to delete this product')"

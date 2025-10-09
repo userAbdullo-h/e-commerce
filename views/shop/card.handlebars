@@ -19,12 +19,33 @@
 							alt='{{this.title}}'
 							width='100'
 							height='50'
-						/><p class='fw-bold m-0'>Subaru</p>
+						/><p class='fw-bold m-0'>{{this.title}}</p>
 					</td>
-					<td>{{this.quantity}}</td>
-					<td>${{this.price}}</td>
 					<td>
-						<form action='/card/delete/{{this.id}}' method='post' class='m-0'>
+						<div class='d-flex align-items-center gap-2'>
+							<form
+								action='/card/update/{{this._id}}'
+								method='post'
+								class='m-0'
+							>
+								<input type='hidden' name='action' value='decriment' />
+								<button class='btn btn-sm btn-outline-primary'> - </button>
+							</form>
+							<p class='m-0 p-0'>{{this.quantity}}</p>
+							<form
+								action='/card/update/{{this._id}}'
+								method='post'
+								class='m-0'
+							>
+								<input type='hidden' name='action' value='increment' />
+
+								<button class='btn btn-sm btn-outline-primary'> + </button>
+							</form>
+						</div>
+					</td>
+					<td>{{this.totalPrice}}</td>
+					<td>
+						<form action='/card/delete/{{this._id}}' method='post' class='m-0'>
 							<button
 								class='btn btn-sm btn-danger'
 								onclick="return confirm('Are you sure')"
