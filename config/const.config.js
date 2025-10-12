@@ -1,3 +1,3 @@
-const TEST_USER_EMAOL = 'user@gmail.com'
+const TEST_USER_EMAIL = 'user@gmail.com'
 
-module.exports = TEST_USER_EMAOL
+module.exports = TEST_USER_EMAIL

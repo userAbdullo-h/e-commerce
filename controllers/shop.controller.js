@@ -31,10 +31,17 @@ class ShopController {
 				currency: 'USD',
 			}),
 		}))
-		console.log(card)
+
+		const totalPrice = filteredProduct.reduce((sum, item) => {
+			return sum + item.price * item.quantity
+		}, 0)
 		res.render('shop/card', {
 			title: 'Shopping card',
 			products: filteredProduct,
+			totalPrice: totalPrice.toLocaleString('en-US', {
+				style: 'currency',
+				currency: 'USD',
+			}),
 		})
 	}
 

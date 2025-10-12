@@ -5,6 +5,7 @@ const express = require('express')
 const { engine } = require('express-handlebars')
 const session = require('express-session')
 const mongoose = require('mongoose')
+const hbsHelper = require('./helpers/hbs')
 
 const app = express()
 
@@ -20,13 +21,14 @@ app.use(
 )
 
 //Views Engine
-app.engine('handlebars', engine())
+app.engine('handlebars', engine({ helpers: hbsHelper }))
 app.set('view engine', 'handlebars')
 app.set('views', path.join(__dirname, 'views'))
 
 //Routes
 app.use(require('./routes/shop.route'))
 app.use('/admin', require('./routes/admin.route'))
+app.use('/orders', require('./routes/order.route'))
 
 app.use((req, res) => {
 	res.status(404).render('404', { title: '404 Not Found' })
