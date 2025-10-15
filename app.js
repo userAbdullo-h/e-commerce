@@ -25,10 +25,18 @@ app.engine('handlebars', engine({ helpers: hbsHelper }))
 app.set('view engine', 'handlebars')
 app.set('views', path.join(__dirname, 'views'))
 
+app.use((req, res, next) => {
+	res.locals.message = req.session.message
+	res.locals.user = req.session.user
+	delete req.session.message
+	next()
+})
+
 //Routes
 app.use(require('./routes/shop.route'))
 app.use('/admin', require('./routes/admin.route'))
 app.use('/orders', require('./routes/order.route'))
+app.use('/auth', require('./routes/auth.route'))
 
 app.use((req, res) => {
 	res.status(404).render('404', { title: '404 Not Found' })
