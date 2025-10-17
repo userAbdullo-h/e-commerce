@@ -12,6 +12,20 @@
 					>Products</a></li>
 				<li class='nav-item'><a href='/admin/add-products' class='nav-link'>Add
 						Products</a></li>
+				{{#if user._id}}
+					<li class='nav-item'>
+						<a href='/auth/logout' class='nav-link'>Logout</a>
+					</li>
+
+				{{else}}
+					<li class='nav-item'>
+						<a href='/auth/login' class='nav-link'>Login</a>
+					</li>
+					<li class='nav-item'>
+						<a href='/auth/register' class='nav-link'>Sign in</a>
+					</li>
+
+				{{/if}}
 			</ul>
 		</div>
 	</div>

@@ -36,6 +36,13 @@ class authController {
 		}
 
 		req.session.user = user
+		res.redirect('/auth/login-back')
+	}
+	loginBack(req, res) {
+		req.session.message = {
+			type: 'success',
+			message: 'Welcome back user',
+		}
 		res.redirect('/')
 	}
 
@@ -71,9 +78,10 @@ class authController {
 			to: email,
 			subject: 'Email verification! ',
 			html: ` 
+				
 				<h1>Hello ${name}</h1>
 				<h3 style="color:#a3a3c2">Please click the link below for verification:</h3>
-				<a class="" href='${verifyLink}'>Verify</a>									
+				<p><a class="" href='${verifyLink}'>Verify</a></p>									
 
 			`,
 		})
@@ -85,19 +93,38 @@ class authController {
 		res.redirect('/auth/login')
 	}
 
+	logout(req, res) {
+		req.session.destroy(() => {
+			res.redirect('/auth/logged-out')
+		})
+	}
+	loggedOut(req, res) {
+		req.session.message = {
+			type: 'success',
+			message: 'Logged out successfully',
+		}
+		res.redirect('/auth/login')
+	}
+
 	async verify(req, res) {
 		const user = await userModel.findOne({
 			verifyToken: req.params.verifyToken,
 		})
 		if (!user) {
-			res.send('User not found')
+			return res.render('auth/verify', {
+				success: false,
+				message: 'Invalid or expired link. Please try again',
+			})
 		}
 
 		user.isVerified = true
 		user.verifyToken = undefined
 
 		await user.save()
-		res.render('auth/verified')
+		return res.render('auth/verify', {
+			success: true,
+			message: 'Your account ha been successfully verified. Now you can login!',
+		})
 	}
 }
 
