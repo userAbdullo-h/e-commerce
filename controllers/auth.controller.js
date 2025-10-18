@@ -39,9 +39,11 @@ class authController {
 		res.redirect('/auth/login-back')
 	}
 	loginBack(req, res) {
+		const user = req.session.user.name
+
 		req.session.message = {
 			type: 'success',
-			message: 'Welcome back user',
+			message: `Welcome back ${user}`,
 		}
 		res.redirect('/')
 	}
@@ -123,7 +125,8 @@ class authController {
 		await user.save()
 		return res.render('auth/verify', {
 			success: true,
-			message: 'Your account ha been successfully verified. Now you can login!',
+			message:
+				'Your account has been successfully verified. Now you can login!',
 		})
 	}
 }
