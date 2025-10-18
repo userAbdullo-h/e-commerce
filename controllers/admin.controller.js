@@ -1,13 +1,17 @@
 const productModel = require('../models/product.model')
 
 class AdminController {
-	renderAddProduc(req, res) {
+	renderAddProducts(req, res) {
 		res.render('admin/add-products', { title: 'Add products' })
 	}
 
 	async addProducts(req, res) {
 		// const { title, image, price } = req.body
 		await productModel.create(req.body)
+		req.session.message = {
+			type: 'success',
+			message: 'Product added successfully',
+		}
 		res.redirect('/admin/products')
 	}
 
@@ -23,11 +27,19 @@ class AdminController {
 
 	async editProduct(req, res) {
 		await productModel.findByIdAndUpdate(req.params.id, req.body)
+		req.session.message = {
+			type: 'success',
+			message: 'Product updated successfully',
+		}
 		res.redirect('/admin/products')
 	}
 
 	async deleteProduct(req, res) {
 		await productModel.findByIdAndDelete(req.params.id)
+		req.session.message = {
+			type: 'success',
+			message: 'Product deleted successfully',
+		}
 		res.redirect('/admin/products')
 	}
 }

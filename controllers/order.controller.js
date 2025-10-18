@@ -1,11 +1,9 @@
-const TEST_USER_EMAIL = require('../config/const.config')
 const cardModel = require('../models/card.model')
 const orderModel = require('../models/order.model')
-const userModel = require('../models/user.model')
 
 class OrderController {
 	async renderOrder(req, res) {
-		const user = await userModel.findOne({ email: TEST_USER_EMAIL })
+		const user = req.session.user
 		const orders = await orderModel
 			.find({ user: user._id })
 			.populate('products.product')
@@ -16,7 +14,7 @@ class OrderController {
 	}
 
 	async placeOrder(req, res) {
-		const user = await userModel.findOne({ email: TEST_USER_EMAIL })
+		const user = req.session.user
 		const card = await cardModel.findOne({ user: user._id }).populate({
 			path: 'items',
 			populate: { path: 'product', select: 'title price image' },
@@ -37,6 +35,11 @@ class OrderController {
 		})
 		card.items = []
 		await card.save()
+
+		req.session.message = {
+			type: 'info',
+			message: 'Ordered',
+		}
 
 		res.redirect('/orders')
 	}

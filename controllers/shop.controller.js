@@ -1,7 +1,5 @@
-const TEST_USER_EMAIL = require('../config/const.config')
 const cardModel = require('../models/card.model')
 const productModel = require('../models/product.model')
-const userModel = require('../models/user.model')
 
 class ShopController {
 	async renderHome(req, res) {
@@ -10,23 +8,23 @@ class ShopController {
 	}
 
 	async renderCart(req, res) {
-		const user = await userModel.findOne({ email: TEST_USER_EMAIL })
+		const user = req.session.user
 		const card = await cardModel
 			.findOne({ user: user._id })
-			.select('user items')
-			.populate({
-				path: 'items',
-				populate: {
-					path: 'product',
-					select: 'title price image',
-				},
-			})
+			.populate('items.product')
 			.lean()
 
+		if (card === null) {
+			return res.render('shop/card', {
+				title: 'Shopping card',
+				products: [],
+			})
+		}
+
 		const filteredProduct = card.items.map(i => ({
-			...i.product._doc,
+			...i.product,
 			quantity: i.quantity,
-			totalPrice: (i.product._doc.price * i.quantity).toLocaleString('en-US', {
+			totalPrice: (i.product.price * i.quantity).toLocaleString('en-US', {
 				style: 'currency',
 				currency: 'USD',
 			}),
@@ -46,7 +44,7 @@ class ShopController {
 	}
 
 	async addToCard(req, res) {
-		const user = await userModel.findOne({ email: TEST_USER_EMAIL })
+		const user = req.session.user
 		const productId = req.params.id
 		let card = await cardModel.findOne({ user: user._id })
 
@@ -64,11 +62,15 @@ class ShopController {
 		}
 
 		await card.save()
+		req.session.message = {
+			type: 'info',
+			message: 'Added to card',
+		}
 		res.redirect('/card')
 	}
 
 	async updateCardItems(req, res) {
-		const user = await userModel.findOne({ email: TEST_USER_EMAIL })
+		const user = req.session.user
 		const productId = req.params.id
 		const { action } = req.body
 		let card = await cardModel.findOne({ user: user._id })
@@ -92,13 +94,17 @@ class ShopController {
 	}
 
 	async deleteCard(req, res) {
-		const user = await userModel.findOne({ email: TEST_USER_EMAIL })
+		const user = req.session.user
 		const productId = req.params.id
 		let card = await cardModel.findOne({ user: user._id })
 
 		card.items = card.items.filter(c => c.product.toString() !== productId)
 		await card.save()
 
+		req.session.message = {
+			type: 'info',
+			message: 'Card deleted',
+		}
 		res.redirect('/')
 	}
 }

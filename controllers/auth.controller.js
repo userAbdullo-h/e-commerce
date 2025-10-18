@@ -15,7 +15,7 @@ class authController {
 				type: 'danger',
 				message: 'User not found',
 			}
-			res.redirect('/auth/login')
+			return res.redirect('/auth/login')
 		}
 
 		if (!user.isVerified) {
@@ -23,7 +23,7 @@ class authController {
 				type: 'danger',
 				message: 'Email is not verified',
 			}
-			res.redirect('/auth/login')
+			return res.redirect('/auth/login')
 		}
 
 		const isMatch = await bcrypt.compare(password, user.password)
@@ -32,7 +32,7 @@ class authController {
 				type: 'danger',
 				message: 'Password is incorrect',
 			}
-			res.redirect('/auth/login')
+			return res.redirect('/auth/login')
 		}
 
 		req.session.user = user
@@ -43,7 +43,7 @@ class authController {
 
 		req.session.message = {
 			type: 'success',
-			message: `Welcome back ${user}`,
+			message: `Welcome ${user}`,
 		}
 		res.redirect('/')
 	}
@@ -61,7 +61,7 @@ class authController {
 				type: 'danger',
 				message: 'User already exist',
 			}
-			res.redirect('/auth/register')
+			return res.redirect('/auth/register')
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10)
@@ -81,9 +81,24 @@ class authController {
 			subject: 'Email verification! ',
 			html: ` 
 				
-				<h1>Hello ${name}</h1>
-				<h3 style="color:#a3a3c2">Please click the link below for verification:</h3>
-				<p><a class="" href='${verifyLink}'>Verify</a></p>									
+				<body style="display: flex; justify-content: center; align-items: center;font-family: Helvetica,Arial,sans-serif;">
+
+			<div style="width: 500px; height: 500px;">
+				<h2 style="letter-spacing: 1px;"">E-commerce</h2>
+				<hr>
+
+				<h1 style="letter-spacing: 1px;line-height: 40px;">Verification link</h1>
+
+				<p style="font-size: 23px; letter-spacing: 0.5px; margin-bottom: 30px">Hello ${name}</p>
+		
+
+				<p style="font-size: 17px; letter-spacing: 0.5px;">Please click the link below for verification:</p>
+
+					<a style="font-size: 17px; letter-spacing: 0.5px;text-decoration: none;margin-top:20px;margin-bottom:20px;
+					" href="${verifyLink}">Verify</a>
+				<p style="font-size: 17px; letter-spacing: 0.5px;">If you didn't request this, please ignore this email for now.</p>
+			</div>
+	</body>								
 
 			`,
 		})

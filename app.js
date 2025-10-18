@@ -6,6 +6,10 @@ const { engine } = require('express-handlebars')
 const session = require('express-session')
 const mongoose = require('mongoose')
 const hbsHelper = require('./helpers/hbs')
+const adminMiddleware = require('./middlewares/admin.middleware')
+const authMiddleware = require('./middlewares/auth.middleware')
+const AppError = require('./utils/error')
+const errorMiddleware = require('./middlewares/error.middleware')
 
 const app = express()
 
@@ -34,13 +38,15 @@ app.use((req, res, next) => {
 
 //Routes
 app.use(require('./routes/shop.route'))
-app.use('/admin', require('./routes/admin.route'))
-app.use('/orders', require('./routes/order.route'))
+app.use('/admin', adminMiddleware, require('./routes/admin.route'))
+app.use('/orders', authMiddleware, require('./routes/order.route'))
 app.use('/auth', require('./routes/auth.route'))
 
-app.use((req, res) => {
-	res.status(404).render('404', { title: '404 Not Found' })
+app.use((req, res, next) => {
+	next(new AppError('page not found', 404))
 })
+
+app.use(errorMiddleware)
 
 async function startApp() {
 	try {

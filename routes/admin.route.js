@@ -1,8 +1,9 @@
 const express = require('express')
 const adminController = require('../controllers/admin.controller')
+const adminMiddleware = require('../middlewares/admin.middleware')
 const router = express.Router()
 
-router.get('/add-products', adminController.renderAddProduc)
+router.get('/add-products', adminController.renderAddProducts)
 router.post('/add-products', adminController.addProducts)
 
 router.get('/products', adminController.renderProducts)
