@@ -15,4 +15,12 @@ router.get('/logged-out', authController.loggedOut)
 
 router.get('/verify/:verifyToken', authController.verify)
 
+router.get('/forgot-password', authController.renderForgotPassword)
+router.post('/send-otp', authController.sendOTP)
+
+router.get('/verify-otp', authController.renderVerifyOtp)
+router.post('/verify-otp', authController.verifyOtp)
+
+router.get('/reset-password/:token', authController.renderResetPassword)
+
 module.exports = router

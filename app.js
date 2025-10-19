@@ -30,9 +30,9 @@ app.set('view engine', 'handlebars')
 app.set('views', path.join(__dirname, 'views'))
 
 app.use((req, res, next) => {
-	res.locals.message = req.session.message
+	res.locals.alert = req.session.alert
 	res.locals.user = req.session.user
-	delete req.session.message
+	delete req.session.alert
 	next()
 })
 

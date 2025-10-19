@@ -8,7 +8,7 @@ class AdminController {
 	async addProducts(req, res) {
 		// const { title, image, price } = req.body
 		await productModel.create(req.body)
-		req.session.message = {
+		req.session.alert = {
 			type: 'success',
 			message: 'Product added successfully',
 		}
@@ -27,7 +27,7 @@ class AdminController {
 
 	async editProduct(req, res) {
 		await productModel.findByIdAndUpdate(req.params.id, req.body)
-		req.session.message = {
+		req.session.alert = {
 			type: 'success',
 			message: 'Product updated successfully',
 		}
@@ -36,7 +36,7 @@ class AdminController {
 
 	async deleteProduct(req, res) {
 		await productModel.findByIdAndDelete(req.params.id)
-		req.session.message = {
+		req.session.alert = {
 			type: 'success',
 			message: 'Product deleted successfully',
 		}

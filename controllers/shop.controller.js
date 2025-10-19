@@ -62,7 +62,7 @@ class ShopController {
 		}
 
 		await card.save()
-		req.session.message = {
+		req.session.alert = {
 			type: 'info',
 			message: 'Added to card',
 		}
@@ -101,7 +101,7 @@ class ShopController {
 		card.items = card.items.filter(c => c.product.toString() !== productId)
 		await card.save()
 
-		req.session.message = {
+		req.session.alert = {
 			type: 'info',
 			message: 'Card deleted',
 		}

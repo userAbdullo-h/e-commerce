@@ -36,7 +36,7 @@ class OrderController {
 		card.items = []
 		await card.save()
 
-		req.session.message = {
+		req.session.alert = {
 			type: 'info',
 			message: 'Ordered',
 		}
