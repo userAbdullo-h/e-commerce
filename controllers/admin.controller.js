@@ -6,12 +6,8 @@ class AdminController {
 	}
 
 	async addProducts(req, res) {
-		// const { title, image, price } = req.body
-		await productModel.create(req.body)
-		req.session.alert = {
-			type: 'success',
-			message: 'Product added successfully',
-		}
+		await productModel.create({ ...req.body, image: req.file.filename })
+		req.session.alert = { type: 'success', message: 'Product added successfully' }
 		res.redirect('/admin/products')
 	}
 
@@ -26,20 +22,19 @@ class AdminController {
 	}
 
 	async editProduct(req, res) {
-		await productModel.findByIdAndUpdate(req.params.id, req.body)
-		req.session.alert = {
-			type: 'success',
-			message: 'Product updated successfully',
+		let image
+		if (req.file) {
+			image = req.file.filename
 		}
+
+		await productModel.findByIdAndUpdate(req.params.id, { ...req.body, image })
+		req.session.alert = { type: 'success', message: 'Product updated successfuly' }
 		res.redirect('/admin/products')
 	}
 
 	async deleteProduct(req, res) {
 		await productModel.findByIdAndDelete(req.params.id)
-		req.session.alert = {
-			type: 'success',
-			message: 'Product deleted successfully',
-		}
+		req.session.alert = { type: 'success', message: 'Product deleted successfully' }
 		res.redirect('/admin/products')
 	}
 }

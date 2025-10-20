@@ -1,6 +1,6 @@
 <h1>Add Product</h1>
 
-<form action='/admin/add-products' method='post'>
+<form action='/admin/add-products' method='post' enctype='multipart/form-data'>
 	<div class='form-floating mb-3'>
 		<input
 			class='form-control'
@@ -13,14 +13,7 @@
 	</div>
 
 	<div class='form-floating mb-3'>
-		<input
-			class='form-control'
-			id='image'
-			placeholder='Image URL'
-			name='image'
-			required
-		/>
-		<label for='image'>Image</label>
+		<input class='form-control' type='file' name='myFile' />
 	</div>
 
 	<div class='form-floating mb-3'>

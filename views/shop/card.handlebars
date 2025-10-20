@@ -14,29 +14,16 @@
 			{{#each products}}
 				<tr>
 					<td class='d-flex gap-2 align-items-center'>
-						<img
-							src='{{this.image}}'
-							alt='{{this.title}}'
-							width='100'
-							height='50'
-						/><p class='fw-bold m-0'>{{this.title}}</p>
+						<img src='http://localhost:8000/images/{{this.image}}' alt='{{this.title}}' width='100' height='50' /><p class='fw-bold m-0'>{{this.title}}</p>
 					</td>
 					<td>
 						<div class='d-flex align-items-center gap-2'>
-							<form
-								action='/card/update/{{this._id}}'
-								method='post'
-								class='m-0'
-							>
+							<form action='/card/update/{{this._id}}' method='post' class='m-0'>
 								<input type='hidden' name='action' value='decriment' />
 								<button class='btn btn-sm btn-outline-primary'> - </button>
 							</form>
 							<p class='m-0 p-0'>{{this.quantity}}</p>
-							<form
-								action='/card/update/{{this._id}}'
-								method='post'
-								class='m-0'
-							>
+							<form action='/card/update/{{this._id}}' method='post' class='m-0'>
 								<input type='hidden' name='action' value='increment' />
 
 								<button class='btn btn-sm btn-outline-primary'> + </button>
@@ -46,20 +33,13 @@
 					<td>{{this.totalPrice}}</td>
 					<td>
 						<form action='/card/delete/{{this._id}}' method='post' class='m-0'>
-							<button
-								class='btn btn-sm btn-danger'
-								onclick="return confirm('Are you sure')"
-							>Remove</button>
+							<button class='btn btn-sm btn-danger' onclick="return confirm('Are you sure')">Remove</button>
 						</form>
 					</td>
 				</tr>
 			{{/each}}
 			<td colspan='4'><div class='d-flex justify-content-end'>
-					<form
-						action='/orders/place-order'
-						method='post'
-						class='d-flex justify-content-end m-0'
-					>
+					<form action='/orders/place-order' method='post' class='d-flex justify-content-end m-0'>
 						<button class='btn btn-primary btn-sm'>Place order
 							{{totalPrice}}</button>
 					</form>

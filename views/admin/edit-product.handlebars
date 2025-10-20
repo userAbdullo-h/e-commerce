@@ -1,36 +1,27 @@
 <h1>Edit {{product.title}}</h1>
 
-<form action='/admin/edit-product/{{product._id}}' method='post'>
+<form action='/admin/edit-product/{{product._id}}' method='post' enctype='multipart/form-data'>
 	<div class='form-floating mb-3'>
-		<input
-			class='form-control'
-			id='title'
-			placeholder='Title'
-			name='title'
-			value='{{product.title}}'
-		/>
+		<input class='form-control' id='title' placeholder='Title' name='title' value='{{product.title}}' />
 		<label for='title'>Title</label>
 	</div>
 
-	<div class='form-floating mb-3'>
-		<input
-			class='form-control'
-			id='image'
-			placeholder='Image URL'
-			name='image'
-			value='{{product.image}}'
-		/>
-		<label for='image'>Image</label>
+	<div class='mb-3'>
+		{{#if product.image}}
+			<img
+				src='http://localhost:8000/images/{{product.image}}'
+				alt='{{product.title}}'
+				width='107'
+				height='50'
+				class='img-thumbnail mb-3'
+			/>
+		{{/if}}
+
+		<input class='form-control' type='file' name='image' />
 	</div>
 
 	<div class='form-floating mb-3'>
-		<input
-			class='form-control'
-			id='price'
-			placeholder='Price'
-			name='price'
-			value='{{product.price}}'
-		/>
+		<input class='form-control' id='price' placeholder='Price' name='price' value='{{product.price}}' />
 		<label for='price'>Price</label>
 	</div>
 

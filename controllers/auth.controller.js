@@ -156,6 +156,29 @@ class authController {
 			return res.redirect('/auth/forgot-password')
 		}
 
+		const existingOtp = await otpModel
+			.findOne({ user: user._id })
+			.sort({ createdAt: -1 })
+
+		console.log(existingOtp)
+
+		if (
+			existingOtp &&
+			Date.now() - existingOtp.otpLastSent.getTime() < 60 * 1000
+		) {
+			req.session.alert = {
+				type: 'warning',
+				message:
+					'An OTP was already sent recently. Please wait 1 minute before requesting a new one',
+			}
+			return res.redirect('/auth/forgot-password')
+		}
+
+		req.session.alert = {
+			type: 'success',
+			message: 'OTP has been sent to your email. Please check your inbox',
+		}
+
 		const otp = Math.floor(100000 + Math.random() * 900000).toString() //Generate 6-digit code
 		const hash = await bcrypt.hash(otp, 10)
 
@@ -170,16 +193,19 @@ class authController {
 		await otpModel.create(otpData)
 		await sendOtpEmail(email, user.name, otp)
 
-		req.session.alert = {
-			type: 'success',
-			message: 'OTP has been sent to your email. Please check your inbox',
-		}
 		req.session.uid = user._id
 		res.redirect(`/auth/verify-otp`)
 	}
 
 	// RenderVerifyOTP
 	renderVerifyOtp(req, res) {
+		const userId = req.session.uid
+		if (!userId) {
+			req.session.alert = {
+				type: 'danger',
+				message: 'Session expired. Please try again',
+			}
+		}
 		res.render(`auth/verify-otp`, { title: 'Verify OTP' })
 	}
 
@@ -266,7 +292,64 @@ class authController {
 
 	// RenderResetPassword
 	renderResetPassword(req, res) {
+		const userId = req.session.uid
+		if (!userId) {
+			req.session.alert = {
+				type: 'danger',
+				message: 'Session expired. Please try again',
+			}
+		}
 		res.render('auth/reset-password', { title: 'Reset password' })
+	}
+
+	// ResetPassword
+	async resetPassword(req, res) {
+		const userId = req.session.uid
+		if (!userId) {
+			req.session.alert = {
+				type: 'danger',
+				message: 'Session expired. Please try again',
+			}
+			return res.redirect('/auth/forgot-password')
+		}
+
+		const { password, confirmPassword } = req.body
+		if (!password || !confirmPassword) {
+			req.session.alert = {
+				type: 'danger',
+				message: 'All fields are required',
+			}
+			return res.redirect('/auth/reset-password')
+		}
+
+		if (password !== confirmPassword) {
+			req.session.alert = {
+				type: 'danger',
+				message: 'Passwords do not match',
+			}
+			return res.redirect('/auth/reset-password')
+		}
+
+		const user = await userModel.findById(userId)
+
+		if (!user) {
+			req.session.alert = {
+				type: 'danger',
+				message: 'User is not defined',
+			}
+			return res.redirect('/auth/forgot-password')
+		}
+
+		user.password = await bcrypt.hash(password, 10)
+		await user.save()
+
+		req.session.alert = {
+			type: 'success',
+			message: 'Password reset successfully. Now you can log in',
+		}
+		req.session.destroy(() => {
+			res.redirect('/auth/login')
+		})
 	}
 }
 
