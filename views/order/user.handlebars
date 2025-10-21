@@ -3,21 +3,17 @@
 {{#if orders.length}}
 	{{#each orders}}
 		<div class='card mb-4 shadow-sm'>
-			<div
-				class='card-header d-flex justify-content-between align-items-center'
-			>
+			<div class='card-header d-flex justify-content-between align-items-center'>
 				<strong>Order id: </strong><span class='text-muted'>{{this._id}}</span>
 			</div>
 
 			<div class='card-body'>
 				<ul class='list-group mb-3'>
 					{{#each this.products}}
-						<li
-							class='list-group-item d-flex justify-content-between align-items-center'
-						>
+						<li class='list-group-item d-flex justify-content-between align-items-center'>
 							<div class='d-flex gap-2 align-items-center'>
 								<img
-									src='{{this.product.image}}'
+									src='http://localhost:8000/images/{{this.product.image}}'
 									alt='{{this.product.title}}'
 									width='100'
 									height='50'
@@ -29,10 +25,7 @@
 									{{this.quantity}}
 									pcs</small>
 							</div>
-							<span class='text-success fw-bold'>{{calcTotal
-									this.product.price
-									this.quantity
-								}}</span>
+							<span class='text-success fw-bold'>{{calcTotal this.product.price this.quantity}}</span>
 						</li>
 					{{/each}}
 				</ul>

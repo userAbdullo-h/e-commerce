@@ -3,16 +3,23 @@ const productModel = require('../models/product.model')
 
 class ShopController {
 	async renderHome(req, res) {
-		const products = await productModel.find().lean()
-		res.render('shop/home', { title: 'Shop', products })
+		const page = req.query.page || 1
+		const limit = 6
+		const skip = (page - 1) * limit
+
+		const [products, countProducts] = await Promise.all([
+			productModel.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+			productModel.countDocuments(),
+		])
+
+		const totalPages = Math.max(Math.ceil(countProducts / limit), 1)
+
+		res.render('shop/home', { title: 'Shop', products, totalPages, currentPage: page })
 	}
 
 	async renderCart(req, res) {
 		const user = req.session.user
-		const card = await cardModel
-			.findOne({ user: user._id })
-			.populate('items.product')
-			.lean()
+		const card = await cardModel.findOne({ user: user._id }).populate('items.product').lean()
 
 		if (card === null) {
 			return res.render('shop/card', {
@@ -52,9 +59,7 @@ class ShopController {
 			card = new cardModel({ user: user._id, items: [] })
 		}
 
-		const existingItem = card.items.find(
-			i => i.product.toString() === productId
-		)
+		const existingItem = card.items.find(i => i.product.toString() === productId)
 		if (existingItem) {
 			existingItem.quantity += 1
 		} else {

@@ -4,7 +4,7 @@
 	<div class='row'>
 		{{#each products}}
 			<div class='card col-3 mt-4 me-4'>
-				<img src='http://localhost:8000/images/{{this.image}}' class='card-img-top mt-2' alt='{{this.title}}' />
+				<img src='http://localhost:8000/images/{{this.image}}' class='card-img-top mt-2 img-thumbnail' style="max-height: 150px;" alt='{{this.title}}' />
 				<div class='card-body'>
 					<div class='d-flex justify-content-between align-items-center'>
 						<h3 class='card-title'>{{this.title}}</h3>
@@ -28,4 +28,16 @@
 			</div>
 		{{/each}}
 	</div>
+
+	{{!-- Pagination --}}
+
+	<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center mt-3">
+    <li class="page-item {{#if (eq currentPage 1)}}disabled {{/if}}"><a class="page-link" href="?page=1"><span aria-hidden="true">&laquo;</span></a></li>
+		{{#each (range 1 totalPages)}}
+    	<li class="page-item {{#if (eq ../currentPage this)}}active{{/if}}"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+		{{/each}}
+    <li class="page-item {{#if (eq currentPage totalPages)}}disabled {{/if}}"><a class="page-link" href="?page=2"><span aria-hidden="true">&raquo;</span></a></li>
+  </ul>
+</nav>
 </div>

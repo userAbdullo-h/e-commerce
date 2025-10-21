@@ -14,7 +14,12 @@
 			{{#each products}}
 				<tr>
 					<td class='d-flex gap-2 align-items-center'>
-						<img src='http://localhost:8000/images/{{this.image}}' alt='{{this.title}}' width='100' height='50' /><p class='fw-bold m-0'>{{this.title}}</p>
+						<img
+							src='http://localhost:8000/images/{{this.image}}'
+							alt='{{this.title}}'
+							class='img-thumbnail'
+							style='max-height: 150px;'
+						/><p class='fw-bold m-0'>{{this.title}}</p>
 					</td>
 					<td>
 						<div class='d-flex align-items-center gap-2'>
